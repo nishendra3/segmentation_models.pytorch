@@ -9,7 +9,7 @@ except ImportError:
 
 class Conv2dReLU(nn.Sequential):
     '''
-        Modified to use PReLU activation
+        Modified to use PReLU
     '''
     def __init__(
         self,
@@ -35,7 +35,8 @@ class Conv2dReLU(nn.Sequential):
             padding=padding,
             bias=not (use_batchnorm),
         )
-        relu = nn.PReLU(inplace=True)
+        # relu = nn.ReLU(inplace=True)
+        relu = nn.PReLU()
 
         if use_batchnorm == "inplace":
             bn = InPlaceABN(out_channels, activation="leaky_relu", activation_param=0.0)
