@@ -1,11 +1,16 @@
 import torch.nn as nn
-
+import math
+INIT_A = 0.25
 
 def initialize_decoder(module):
     for m in module.modules():
 
         if isinstance(m, nn.Conv2d):
-            nn.init.kaiming_uniform_(m.weight, mode="fan_in", nonlinearity="relu")
+            
+            n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels  # perhaps in_channels? this might be backpropagation
+            nn.init.normal_(m.weight, mean=0, std=math.sqrt(2. / ((1 + math.pow(INIT_A, 2)) * n)))
+
+            # nn.init.kaiming_uniform_(m.weight, mode="fan_in", nonlinearity="relu")
             if m.bias is not None:
                 nn.init.constant_(m.bias, 0)
 
